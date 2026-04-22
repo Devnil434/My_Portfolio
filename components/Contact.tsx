@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { resumeData } from "@/data/resume";
 import { Mail, Code, Briefcase, Send, Leaf } from "lucide-react";
-import { useState } from "react";
-import Image from "next/image";
+import { AvatarWatermark } from "./AvatarEntity";
 
 const SOCIAL = [
   { label: "Email",    href: `mailto:${resumeData.personalInfo.email}`,  icon: Mail,     color: "#3EE6A5", text: resumeData.personalInfo.email },
@@ -57,17 +57,8 @@ export function Contact() {
         />
       ))}
 
-      {/* Faded avatar in corner */}
-      <div className="absolute bottom-0 right-0 w-72 h-72 opacity-[0.05] pointer-events-none overflow-hidden rounded-tl-full">
-        <Image
-          src={resumeData.personalInfo.avatarUrl}
-          alt=""
-          fill
-          className="object-cover"
-          sizes="288px"
-          aria-hidden
-        />
-      </div>
+      {/* Faded avatar watermark bottom-right */}
+      <AvatarWatermark size={300} opacity={0.06} className="bottom-0 right-0" />
 
       <div className="container mx-auto px-6 max-w-5xl relative">
         {/* Heading */}

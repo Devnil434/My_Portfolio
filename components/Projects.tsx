@@ -1,300 +1,442 @@
 "use client";
 
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { resumeData } from "@/data/resume";
-import { ArrowUpRight, Code, X, Zap } from "lucide-react";
+import { ArrowUpRight, Code, ExternalLink, Zap, CheckCircle2, ChevronRight, X } from "lucide-react";
+import { AvatarEntity } from "./AvatarEntity";
 
 type Project = (typeof resumeData.projects)[number];
 
-/* ── 3D tilt card ── */
-function TiltCard({ project, onClick }: { project: Project; onClick: () => void }) {
+/* ── 3D Tilt Card (Short View) ── */
+function TiltCard({ project, onOpenModal }: { project: Project; onOpenModal: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
-  const x   = useMotionValue(0);
-  const y   = useMotionValue(0);
-  const rotX = useTransform(y, [-0.5, 0.5], [8, -8]);
-  const rotY = useTransform(x, [-0.5, 0.5], [-8, 8]);
-  const sRotX = useSpring(rotX, { stiffness: 200, damping: 20 });
-  const sRotY = useSpring(rotY, { stiffness: 200, damping: 20 });
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Less extreme tilt for a premium feel
+  const rotX = useTransform(y, [-0.5, 0.5], [6, -6]);
+  const rotY = useTransform(x, [-0.5, 0.5], [-6, 6]);
+  const sRotX = useSpring(rotX, { stiffness: 150, damping: 20 });
+  const sRotY = useSpring(rotY, { stiffness: 150, damping: 20 });
 
   function handleMouse(e: React.MouseEvent<HTMLDivElement>) {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top)  / rect.height - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
   }
-  function resetTilt() { x.set(0); y.set(0); }
+  function resetTilt() {
+    x.set(0);
+    y.set(0);
+  }
 
   return (
     <motion.div
       ref={ref}
-      onClick={onClick}
       onMouseMove={handleMouse}
       onMouseLeave={resetTilt}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
       style={{
         rotateX: sRotX,
         rotateY: sRotY,
         transformStyle: "preserve-3d",
-        perspective: 800,
+        perspective: 1000,
       }}
-      className="glass-card cursor-pointer group overflow-hidden relative"
+      className="group relative flex flex-col h-full rounded-[24px] overflow-hidden bg-[var(--bg-card)] border border-[var(--glass-border)] cursor-default transition-all duration-500"
+      whileHover={{ y: -8, scale: 1.02 }}
     >
-      {/* Glow border animation on hover */}
+      {/* Dynamic Glow Background */}
       <motion.div
-        className="absolute inset-0 rounded-[20px] pointer-events-none"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
         style={{
-          border: `1px solid color-mix(in srgb, ${project.color} 0%, transparent)`,
-        }}
-        whileHover={{
-          borderColor: `color-mix(in srgb, ${project.color} 55%, transparent)`,
-          boxShadow: `0 0 30px color-mix(in srgb, ${project.color} 25%, transparent), inset 0 0 20px color-mix(in srgb, ${project.color} 8%, transparent)`,
+          background: `radial-gradient(circle at 50% 0%, color-mix(in srgb, ${project.color} 15%, transparent), transparent 70%)`,
         }}
       />
 
-      {/* Color accent bar */}
+      {/* Top Gradient Bar */}
       <div
-        className="h-1 w-full"
-        style={{ background: `linear-gradient(90deg, ${project.color}, transparent 80%)` }}
+        className="h-1.5 w-full transition-all duration-500 group-hover:h-2"
+        style={{ background: `linear-gradient(90deg, ${project.color}, transparent)` }}
       />
 
-      {/* Card hero area */}
-      <div
-        className="h-36 w-full relative overflow-hidden"
-        style={{
-          background: `radial-gradient(ellipse at 30% 50%, color-mix(in srgb, ${project.color} 20%, transparent), transparent 70%), var(--bg-deep)`,
-        }}
-      >
-        <div
-          className="absolute inset-0 opacity-[0.07]"
-          style={{
-            backgroundImage: `linear-gradient(${project.color}44 1px, transparent 1px), linear-gradient(90deg, ${project.color}44 1px, transparent 1px)`,
-            backgroundSize: "28px 28px",
-          }}
-        />
-        {/* Big monogram */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className="text-7xl font-black opacity-[0.07] font-mono"
-            style={{ color: project.color }}
-          >
-            {project.title.slice(0, 2).toUpperCase()}
-          </span>
+      <div className="p-6 flex flex-col flex-grow z-10">
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center font-black font-mono text-lg shadow-inner"
+              style={{
+                backgroundColor: `color-mix(in srgb, ${project.color} 10%, transparent)`,
+                color: project.color,
+                border: `1px solid color-mix(in srgb, ${project.color} 20%, transparent)`,
+              }}
+            >
+              {project.title.charAt(0)}
+            </div>
+            <h3 className="text-xl font-bold text-[var(--fg-primary)] group-hover:text-[var(--accent-mint)] transition-colors">
+              {project.title}
+            </h3>
+          </div>
+          <ArrowUpRight className="w-5 h-5 text-[var(--fg-subtle)] group-hover:text-[var(--accent-mint)] transition-colors transform group-hover:translate-x-1 group-hover:-translate-y-1" />
         </div>
-        {/* Animated looping ring inside demo area */}
-        <motion.div
-          className="absolute top-1/2 left-1/2 rounded-full"
-          style={{
-            width: 60, height: 60,
-            border: `1px solid color-mix(in srgb, ${project.color} 40%, transparent)`,
-            translateX: "-50%", translateY: "-50%",
-          }}
-          animate={{ scale: [1, 2, 1], opacity: [0.5, 0, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeOut" }}
-        />
-      </div>
 
-      <div className="p-5">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="text-base font-bold text-[var(--fg-primary)] group-hover:text-[var(--accent-mint)] transition-colors">
-            {project.title}
-          </h3>
-          <ArrowUpRight className="w-4 h-4 text-[var(--fg-subtle)] group-hover:text-[var(--accent-mint)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all flex-shrink-0 mt-0.5" />
-        </div>
-        <p className="text-[var(--fg-muted)] text-sm leading-relaxed mb-4 line-clamp-2">
+        <p className="text-[var(--fg-muted)] text-sm leading-relaxed mb-6 flex-grow">
           {project.shortDescription}
         </p>
-        <div className="flex flex-wrap gap-1.5">
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-2 mb-6">
           {project.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="text-[10px] px-2 py-0.5 rounded-full font-mono border"
+              className="text-xs px-2.5 py-1 rounded-full font-mono border transition-transform duration-300 group-hover:-translate-y-0.5"
               style={{
-                color:            project.color,
-                borderColor:      `color-mix(in srgb, ${project.color} 30%, transparent)`,
-                background:       `color-mix(in srgb, ${project.color} 8%, transparent)`,
+                color: project.color,
+                borderColor: `color-mix(in srgb, ${project.color} 30%, transparent)`,
+                backgroundColor: `color-mix(in srgb, ${project.color} 5%, transparent)`,
               }}
             >
               {tag}
             </span>
           ))}
           {project.tags.length > 3 && (
-            <span className="text-[10px] px-2 py-0.5 rounded-full font-mono border border-[var(--glass-border)] text-[var(--fg-subtle)]">
+            <span className="text-xs px-2.5 py-1 rounded-full font-mono border border-[var(--glass-border)] text-[var(--fg-subtle)]">
               +{project.tags.length - 3}
             </span>
           )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3 mt-auto">
+          <button
+            onClick={onOpenModal}
+            className="flex-1 py-2 rounded-xl text-sm font-semibold flex justify-center items-center gap-2 border transition-all hover:shadow-lg"
+            style={{
+              backgroundColor: `color-mix(in srgb, ${project.color} 10%, transparent)`,
+              borderColor: `color-mix(in srgb, ${project.color} 40%, transparent)`,
+              color: project.color,
+            }}
+          >
+            Quick View
+          </button>
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--glass-border)] text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:border-[var(--accent-mint)] hover:bg-[var(--bg-surface)] transition-all"
+            aria-label="Live Demo"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </a>
+          <a
+            href={project.codeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="w-10 h-10 rounded-xl flex items-center justify-center border border-[var(--glass-border)] text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:border-[var(--accent-mint)] hover:bg-[var(--bg-surface)] transition-all"
+            aria-label="Source Code"
+          >
+            <Code className="w-4 h-4" />
+          </a>
         </div>
       </div>
     </motion.div>
   );
 }
 
-/* ── Modal ── */
-function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+/* ── Demo Placeholder (Shimmer) ── */
+function DemoPlaceholder({ color }: { color: string }) {
   return (
-    <motion.div
-      key="modal-overlay"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8"
-      onClick={onClose}
-    >
-      {/* Backdrop */}
+    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-[var(--glass-border)] group">
+      {/* Base background */}
+      <div className="absolute inset-0 bg-[#071f17]" />
+      
+      {/* Animated shimmer gradient */}
+      <motion.div
+        className="absolute inset-0 opacity-30"
+        style={{
+          background: `linear-gradient(110deg, transparent 20%, ${color} 40%, transparent 60%)`,
+          backgroundSize: "200% 100%",
+        }}
+        animate={{ backgroundPosition: ["200% 0", "-200% 0"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+      />
+      
+      {/* Grid overlay */}
       <div
-        className="absolute inset-0"
-        style={{ background: "rgba(7,31,23,0.8)", backdropFilter: "blur(20px)" }}
+        className="absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`,
+          backgroundSize: "20px 20px",
+        }}
       />
 
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="mb-3"
+        >
+          <span className="text-4xl">🌱</span>
+        </motion.div>
+        <span
+          className="font-mono text-sm tracking-widest uppercase font-semibold"
+          style={{ color }}
+        >
+          Demo Growing...
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ── Long Demo Modal ── */
+function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
+  return (
+    <AnimatePresence>
       <motion.div
-        key="modal-content"
-        initial={{ opacity: 0, scale: 0.92, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: 30 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl overflow-hidden rounded-[24px]"
-        style={{
-          background: "var(--bg-card)",
-          border: `1px solid color-mix(in srgb, ${project.color} 30%, transparent)`,
-          boxShadow: `0 0 60px color-mix(in srgb, ${project.color} 20%, transparent), 0 40px 80px rgba(0,0,0,0.6)`,
-          backdropFilter: "blur(24px)",
-        }}
+        key="modal-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 lg:p-8"
+        onClick={onClose}
       >
-        {/* Color bar */}
+        {/* Blur Backdrop */}
         <div
-          className="h-1.5 w-full"
-          style={{ background: `linear-gradient(90deg, ${project.color}, transparent 80%)` }}
+          className="absolute inset-0"
+          style={{ background: "rgba(3, 14, 10, 0.75)", backdropFilter: "blur(16px)" }}
         />
 
-        {/* Modal hero */}
-        <div
-          className="h-52 relative overflow-hidden"
+        {/* Modal Content */}
+        <motion.div
+          key="modal-card"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} // smooth spring-like ease
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-[32px] custom-scrollbar shadow-2xl"
           style={{
-            background: `radial-gradient(ellipse at 30% 50%, color-mix(in srgb, ${project.color} 25%, transparent), transparent 70%), var(--bg-deep)`,
+            background: "var(--bg-deep)",
+            border: `1px solid color-mix(in srgb, ${project.color} 20%, transparent)`,
+            boxShadow: `0 20px 80px rgba(0,0,0,0.8), inset 0 0 40px color-mix(in srgb, ${project.color} 5%, transparent)`,
           }}
         >
+          {/* Subtle Avatar Watermark inside Modal */}
+          <div className="absolute -bottom-20 -right-20 opacity-[0.05] pointer-events-none select-none z-0">
+            <AvatarEntity size={500} ambient noParallax />
+          </div>
+
+          {/* Top Color Accent */}
           <div
-            className="absolute inset-0 opacity-[0.1]"
-            style={{
-              backgroundImage: `linear-gradient(${project.color}55 1px, transparent 1px), linear-gradient(90deg, ${project.color}55 1px, transparent 1px)`,
-              backgroundSize: "30px 30px",
-            }}
+            className="sticky top-0 z-50 h-2 w-full"
+            style={{ background: `linear-gradient(90deg, ${project.color}, transparent)` }}
           />
-          {/* Animated pulse rings inside modal demo area */}
-          {[1, 2, 3].map((r) => (
-            <motion.div
-              key={r}
-              className="absolute top-1/2 left-1/4 rounded-full"
-              style={{
-                width: 40 * r, height: 40 * r,
-                border: `1px solid color-mix(in srgb, ${project.color} 35%, transparent)`,
-                translateX: "-50%", translateY: "-50%",
-              }}
-              animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
-              transition={{ duration: 3, repeat: Infinity, delay: r * 0.6, ease: "easeOut" }}
-            />
-          ))}
-          <div className="absolute inset-0 flex items-end p-6">
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-3xl md:text-4xl font-black text-[var(--fg-primary)]"
-            >
-              {project.title}
-            </motion.h2>
-          </div>
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full border text-[var(--fg-muted)] hover:text-[var(--fg-primary)] hover:border-[var(--accent-mint)] transition-all"
-            style={{ background: "rgba(7,31,23,0.7)", borderColor: "var(--glass-border)", backdropFilter: "blur(8px)" }}
-            aria-label="Close"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
 
-        {/* Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="p-6 md:p-8"
-        >
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-5">
-            {project.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-xs px-3 py-1 rounded-full font-mono border"
-                style={{
-                  color:       project.color,
-                  borderColor: `color-mix(in srgb, ${project.color} 40%, transparent)`,
-                  background:  `color-mix(in srgb, ${project.color} 10%, transparent)`,
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* Description */}
-          <p className="text-[var(--fg-muted)] leading-relaxed text-sm mb-6">
-            {project.fullDescription}
-          </p>
-
-          {/* Animated progress bars */}
-          <div className="space-y-3 mb-8">
-            {[
-              { label: "Performance", val: 98 },
-              { label: "Accessibility", val: 94 },
-              { label: "Best Practices", val: 100 },
-            ].map((bar) => (
-              <div key={bar.label}>
-                <div className="flex justify-between text-xs font-mono mb-1">
-                  <span className="text-[var(--fg-muted)]">{bar.label}</span>
-                  <span style={{ color: project.color }}>{bar.val}%</span>
-                </div>
-                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "var(--bg-surface)" }}>
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ background: `linear-gradient(90deg, ${project.color}, var(--accent-lime))` }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${bar.val}%` }}
-                    transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-                  />
-                </div>
+          <div className="relative z-10 p-6 md:p-10">
+            {/* Header */}
+            <div className="flex justify-between items-start mb-10">
+              <div>
+                <motion.span
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="inline-block text-xs font-mono px-3 py-1 rounded-full mb-4 border"
+                  style={{
+                    color: project.color,
+                    borderColor: `color-mix(in srgb, ${project.color} 40%, transparent)`,
+                    background: `color-mix(in srgb, ${project.color} 10%, transparent)`,
+                  }}
+                >
+                  Featured Project
+                </motion.span>
+                <motion.h2
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                  className="text-4xl md:text-5xl font-black text-[var(--fg-primary)] tracking-tight"
+                >
+                  {project.title}
+                </motion.h2>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={onClose}
+                className="p-3 rounded-full border border-[var(--glass-border)] text-[var(--fg-muted)] hover:text-white hover:border-[var(--accent-mint)] hover:bg-[var(--bg-surface)] transition-all bg-[var(--bg-card)]"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-          {/* CTAs */}
-          <div className="flex gap-4">
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="btn-forest px-5 py-2.5 text-sm rounded-xl flex items-center gap-2"
-            >
-              <Zap className="w-4 h-4" /> Live Demo
-            </a>
-            <a
-              href={project.codeUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="btn-outline-forest px-5 py-2.5 text-sm rounded-xl flex items-center gap-2"
-            >
-              <Code className="w-4 h-4" /> Source Code
-            </a>
+            {/* Grid Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              
+              {/* Left Column: Narrative */}
+              <div className="space-y-10">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <h4 className="text-sm font-mono text-[var(--fg-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> The Problem
+                  </h4>
+                  <p className="text-[var(--fg-primary)] leading-relaxed text-lg">
+                    {/* @ts-ignore */}
+                    {project.problem || project.shortDescription}
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  <h4 className="text-sm font-mono text-[var(--fg-muted)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> The Solution
+                  </h4>
+                  <p className="text-[var(--fg-subtle)] leading-relaxed">
+                    {/* @ts-ignore */}
+                    {project.solution || project.fullDescription}
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h4 className="text-sm font-mono text-[var(--fg-muted)] uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> Key Features
+                  </h4>
+                  <ul className="space-y-3">
+                    {/* @ts-ignore */}
+                    {(project.features || []).map((feature: string, idx: number) => (
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.35 + idx * 0.05 }}
+                        className="flex items-start gap-3 text-[var(--fg-subtle)]"
+                      >
+                        <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: project.color }} />
+                        <span>{feature}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+
+                {/* CTAs */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="pt-6 flex flex-wrap gap-4"
+                >
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all hover:scale-105"
+                    style={{ backgroundColor: project.color, color: "#000" }}
+                  >
+                    <Zap className="w-4 h-4" /> Live Demo
+                  </a>
+                  <a
+                    href={project.codeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-6 py-3 rounded-xl font-semibold flex items-center gap-2 border border-[var(--glass-border)] text-[var(--fg-primary)] hover:border-[var(--accent-mint)] transition-all hover:bg-[var(--bg-surface)]"
+                  >
+                    <Code className="w-4 h-4" /> Source Code
+                  </a>
+                </motion.div>
+              </div>
+
+              {/* Right Column: Visuals & Metrics */}
+              <div className="space-y-10">
+                
+                {/* Demo Area */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <DemoPlaceholder color={project.color} />
+                </motion.div>
+
+                {/* Tech Breakdown */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  <h4 className="text-sm font-mono text-[var(--fg-muted)] uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> Tech Breakdown
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag, idx) => (
+                      <motion.span
+                        key={tag}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3 + idx * 0.05 }}
+                        className="px-3 py-1.5 rounded-lg text-sm bg-[var(--bg-surface)] border border-[var(--glass-border)] text-[var(--fg-subtle)] flex items-center gap-2"
+                      >
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: project.color }} />
+                        {tag}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Performance Metrics */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h4 className="text-sm font-mono text-[var(--fg-muted)] uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> Performance
+                  </h4>
+                  <div className="space-y-4">
+                    {/* @ts-ignore */}
+                    {(project.metrics || []).map((metric: any, idx: number) => (
+                      <div key={metric.label}>
+                        <div className="flex justify-between text-xs font-mono mb-1.5">
+                          <span className="text-[var(--fg-muted)]">{metric.label}</span>
+                          <span style={{ color: project.color }}>{metric.val}%</span>
+                        </div>
+                        <div className="h-2 rounded-full overflow-hidden bg-[#0a2016]">
+                          <motion.div
+                            className="h-full rounded-full"
+                            style={{
+                              background: `linear-gradient(90deg, color-mix(in srgb, ${project.color} 50%, transparent), ${project.color})`,
+                            }}
+                            initial={{ width: 0 }}
+                            animate={{ width: `${metric.val}%` }}
+                            transition={{ duration: 1.2, delay: 0.4 + idx * 0.1, ease: "easeOut" }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+              </div>
+            </div>
           </div>
         </motion.div>
       </motion.div>
-    </motion.div>
+    </AnimatePresence>
   );
 }
 
@@ -304,47 +446,49 @@ export function Projects() {
   const [selected, setSelected] = useState<Project | null>(null);
 
   return (
-    <section id="projects" className="relative py-24 z-10">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section id="projects" className="relative py-24 z-10 overflow-hidden">
+      {/* Background ambient glow */}
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-[var(--accent-mint)] opacity-[0.03] blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[var(--accent-lime)] opacity-[0.02] blur-[120px] rounded-full pointer-events-none" />
 
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
         {/* Heading */}
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
         >
-          <span className="section-label block mb-3">&gt; My Work</span>
-          <h2 className="text-4xl md:text-5xl font-black">
-            Featured <span className="text-forest">Projects</span>
+          <span className="section-label inline-block mb-3 bg-[var(--bg-surface)] px-4 py-1.5 rounded-full border border-[var(--glass-border)] text-sm tracking-wider text-[var(--accent-mint)]">
+            &#47;&#47; MY WORK
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mt-4">
+            Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-mint)] to-[var(--accent-lime)]">Projects</span>
           </h2>
-          <p className="text-[var(--fg-muted)] mt-4 max-w-md mx-auto">
-            Click any card to see the full story.
+          <p className="text-[var(--fg-muted)] mt-6 max-w-lg mx-auto text-lg">
+            A selection of my best work, blending immersive design with robust engineering.
           </p>
         </motion.div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Project Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {projects.map((project, i) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12, duration: 0.65 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: i * 0.1, duration: 0.6 }}
             >
-              <TiltCard project={project} onClick={() => setSelected(project)} />
+              <TiltCard project={project} onOpenModal={() => setSelected(project)} />
             </motion.div>
           ))}
         </div>
       </div>
 
-      <AnimatePresence>
-        {selected && (
-          <ProjectModal project={selected} onClose={() => setSelected(null)} />
-        )}
-      </AnimatePresence>
+      {/* Modal Portal (rendered in flow here, but fixed overlay) */}
+      {selected && <ProjectModal project={selected} onClose={() => setSelected(null)} />}
     </section>
   );
 }

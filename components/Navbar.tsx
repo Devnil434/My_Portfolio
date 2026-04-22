@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { resumeData } from "@/data/resume";
 import { FileText, Menu, X, Leaf } from "lucide-react";
+import { AvatarBadge } from "./AvatarEntity";
 
 const NAV_LINKS = [
   { label: "About",     href: "#about" },
@@ -45,12 +46,7 @@ export function Navbar() {
       <nav className="relative container mx-auto flex items-center justify-between px-6 py-4 max-w-6xl">
         {/* Logo */}
         <Link href="#" className="flex items-center gap-2.5 group" aria-label="Home">
-          <motion.div
-            className="w-8 h-8 rounded-xl btn-forest flex items-center justify-center text-sm font-black"
-            whileHover={{ rotate: 10, scale: 1.1 }}
-          >
-            <Leaf className="w-4 h-4" />
-          </motion.div>
+          <AvatarBadge size={34} />
           <span className="font-bold tracking-tight text-[var(--fg-primary)] text-lg">
             {resumeData.personalInfo.name}
           </span>

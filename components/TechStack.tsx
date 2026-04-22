@@ -11,13 +11,10 @@ const TECH_STACK = [
   { name: "JavaScript",    logo: "/logo/js.png",             category: "Language" },
   { name: "Tailwind CSS",  logo: "/logo/tailwind.png",       category: "Styling" },
   { name: "CSS",           logo: "/logo/css.svg",            category: "Styling" },
-  { name: "HTML",          logo: "/logo/html.svg",           category: "Markup" },
-  { name: "Bootstrap",     logo: "/logo/bootstrap.svg",      category: "Styling" },
+  { name: "HTML",          logo: "/logo/html.png",           category: "Markup" },
   { name: "Framer Motion", logo: "/logo/framer-motion.svg",  category: "Animation" },
-  { name: "GSAP",          logo: "/logo/gsap.png",           category: "Animation" },
   { name: "Node.js",       logo: "/logo/node.png",           category: "Runtime" },
   { name: "Express",       logo: "/logo/express.png",        category: "Framework" },
-  { name: "NestJS",        logo: "/logo/nest.svg",           category: "Framework" },
   { name: "FastAPI",       logo: "/logo/fastapi.png",        category: "Framework" },
   { name: "PostgreSQL",    logo: "/logo/postgreSQL.png",     category: "Database" },
   { name: "MongoDB",       logo: "/logo/mongodb.svg",        category: "Database" },
@@ -42,7 +39,6 @@ const TECH_STACK = [
   { name: "OpenCV",        logo: "/logo/opencv.png",         category: "ML/AI" },
   { name: "Jupyter",       logo: "/logo/jupyter.png",        category: "Tools" },
   { name: "Colab",         logo: "/logo/colab.png",          category: "Tools" },
-  { name: "SASS",          logo: "/logo/sass.png",           category: "Styling" },
   { name: "REST API",      logo: "/logo/api.png",            category: "API" },
 ];
 
