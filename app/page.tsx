@@ -1,37 +1,32 @@
-import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/Hero";
-import { Divider } from "@/components/Divider";
-import { TechStack } from "@/components/TechStack";
-import { Projects } from "@/components/Projects";
-import { Contact } from "@/components/Contact";
-import { Footer } from "@/components/Footer";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
+import { Navbar }             from "@/components/Navbar";
+import { Hero }               from "@/components/Hero";
+import { WaveDivider }        from "@/components/WaveDivider";
+import { TechStack }          from "@/components/TechStack";
+import { Projects }           from "@/components/Projects";
+import { Contact }            from "@/components/Contact";
+import { Footer }             from "@/components/Footer";
 
 export default function Home() {
   return (
     <>
+      {/* Living background (fixed, z-0) */}
+      <AnimatedBackground />
+
+      {/* Navbar */}
       <Navbar />
-      <main className="flex flex-col">
-        {/* Hero */}
+
+      {/* Main content sits above the background */}
+      <main className="relative z-10 flex flex-col">
         <Hero />
-
-        {/* Divider 1 */}
-        <Divider label="// CAPABILITIES //" />
-
-        {/* Tech Stack */}
+        <WaveDivider label="// CAPABILITIES //" />
         <TechStack />
-
-        {/* Divider 2 */}
-        <Divider label="// PROJECTS //" />
-
-        {/* Projects */}
+        <WaveDivider flip label="// PROJECTS //" />
         <Projects />
-
-        {/* Divider 3 */}
-        <Divider label="// CONTACT //" />
-
-        {/* Contact */}
+        <WaveDivider label="// CONTACT //" />
         <Contact />
       </main>
+
       <Footer />
     </>
   );

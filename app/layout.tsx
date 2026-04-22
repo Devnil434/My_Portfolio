@@ -5,20 +5,26 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
+export const viewport = {
+  themeColor: "#0B3D2E",
+};
+
 export const metadata: Metadata = {
-  title: "Alex Dev | Full Stack Engineer",
+  title: "Alex Dev | Living Digital Portfolio",
   description:
-    "Futuristic developer portfolio — building high-performance web experiences with modern technologies.",
+    "Full Stack Engineer & UI/UX Designer — crafting immersive, high-performance web experiences.",
   openGraph: {
-    title: "Alex Dev | Full Stack Engineer",
-    description: "Futuristic animated developer portfolio.",
+    title: "Alex Dev | Living Digital Portfolio",
+    description: "Full Stack Engineer & UI/UX Designer.",
     type: "website",
   },
 };
@@ -31,9 +37,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
+      <body className="min-h-screen flex flex-col bg-[var(--bg-deep)] text-[var(--fg-primary)]">
         {children}
       </body>
     </html>
