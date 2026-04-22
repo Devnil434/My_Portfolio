@@ -1,20 +1,38 @@
+import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
+import { Divider } from "@/components/Divider";
 import { TechStack } from "@/components/TechStack";
 import { Projects } from "@/components/Projects";
 import { Contact } from "@/components/Contact";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
-      <Hero />
-      <TechStack />
-      <Projects />
-      <Contact />
-      
-      <footer className="w-full py-8 text-center text-zinc-500 text-sm border-t border-white/5">
-        <p>© {new Date().getFullYear()} Alex Dev. All rights reserved.</p>
-        <p className="mt-2">Built with Next.js, Tailwind CSS & Framer Motion</p>
-      </footer>
-    </main>
+    <>
+      <Navbar />
+      <main className="flex flex-col">
+        {/* Hero */}
+        <Hero />
+
+        {/* Divider 1 */}
+        <Divider label="// CAPABILITIES //" />
+
+        {/* Tech Stack */}
+        <TechStack />
+
+        {/* Divider 2 */}
+        <Divider label="// PROJECTS //" />
+
+        {/* Projects */}
+        <Projects />
+
+        {/* Divider 3 */}
+        <Divider label="// CONTACT //" />
+
+        {/* Contact */}
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }

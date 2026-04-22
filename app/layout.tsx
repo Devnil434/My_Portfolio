@@ -13,8 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nilanjan Saha | Futuristic Portfolio",
-  description: "Futuristic animated developer portfolio built with Next.js and Framer Motion.",
+  title: "Alex Dev | Full Stack Engineer",
+  description:
+    "Futuristic developer portfolio — building high-performance web experiences with modern technologies.",
+  openGraph: {
+    title: "Alex Dev | Full Stack Engineer",
+    description: "Futuristic animated developer portfolio.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -25,10 +31,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col selection:bg-neon-purple selection:text-white">
-        <div className="fixed inset-0 z-[-1] bg-[url('/noise.png')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+      <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
         {children}
       </body>
     </html>
