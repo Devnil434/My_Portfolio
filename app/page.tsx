@@ -7,10 +7,13 @@ import { Experience }         from "@/components/Experience";
 import { Projects }           from "@/components/Projects";
 import { Contact }            from "@/components/Contact";
 import { Footer }             from "@/components/Footer";
+import { Preloader }          from "@/components/Preloader";
+
 
 export default function Home() {
   return (
     <>
+      <Preloader />
       {/* Living background (fixed, z-0) */}
       <AnimatedBackground />
 
