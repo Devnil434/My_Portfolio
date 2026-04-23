@@ -19,12 +19,12 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Alex Dev | Living Digital Portfolio",
+  title: "Nilanjan Saha | Living Digital Portfolio",
   description:
-    "Full Stack Engineer & UI/UX Designer — crafting immersive, high-performance web experiences.",
+    "AI/ML Engineer — crafting immersive, high-performance web experiences.",
   openGraph: {
-    title: "Alex Dev | Living Digital Portfolio",
-    description: "Full Stack Engineer & UI/UX Designer.",
+    title: "Nilanjan Saha | Living Digital Portfolio",
+    description: "AI/ML Engineer.",
     type: "website",
   },
 };
