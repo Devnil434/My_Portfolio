@@ -78,8 +78,8 @@ function GalaxyRing({ orbit, scale }: { orbit: typeof ORBITS[0]; scale: number }
       >
         {items.map((tech, i) => {
           const angle = ((360 / n) * i * Math.PI) / 180;
-          const x = radius + radius * Math.cos(angle) - LOGO / 2;
-          const y = radius + radius * Math.sin(angle) - LOGO / 2;
+          const x = Math.round(radius + radius * Math.cos(angle) - LOGO / 2);
+          const y = Math.round(radius + radius * Math.sin(angle) - LOGO / 2);
           return (
             <motion.div
               key={tech.name}

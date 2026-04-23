@@ -18,9 +18,36 @@ export function Contact() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("sent");
-    setTimeout(() => setStatus("idle"), 4000);
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        setStatus("sent");
+        (e.target as HTMLFormElement).reset();
+      } else {
+        console.error("Failed to send message");
+        setStatus("idle");
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("idle");
+    }
+
+    if (status !== "idle") {
+      setTimeout(() => setStatus("idle"), 4000);
+    }
   }
 
   return (
@@ -57,9 +84,6 @@ export function Contact() {
         />
       ))}
 
-      {/* Faded avatar watermark bottom-right */}
-      <AvatarWatermark size={300} opacity={0.06} className="bottom-0 right-0" />
-
       <div className="container mx-auto px-6 max-w-5xl relative">
         {/* Heading */}
         <motion.div
@@ -78,60 +102,24 @@ export function Contact() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-4xl mx-auto">
-          {/* Social links */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="flex flex-col gap-4"
-          >
-            <p className="text-sm text-[var(--fg-muted)] font-semibold mb-1 font-mono">Connect via</p>
-            {SOCIAL.map((s) => (
-              <motion.a
-                key={s.label}
-                href={s.href}
-                target={s.href.startsWith("mailto") ? undefined : "_blank"}
-                rel="noreferrer"
-                className="glass-card p-4 flex items-center gap-4 group"
-                whileHover={{ x: 4 }}
-              >
-                <div
-                  className="p-3 rounded-xl flex-shrink-0"
-                  style={{
-                    background: `color-mix(in srgb, ${s.color} 12%, transparent)`,
-                    border:     `1px solid color-mix(in srgb, ${s.color} 22%, transparent)`,
-                  }}
-                >
-                  <s.icon className="w-5 h-5" style={{ color: s.color }} />
-                </div>
-                <div>
-                  <p className="text-[10px] text-[var(--fg-subtle)] font-mono">{s.label}</p>
-                  <p className="text-sm text-[var(--fg-muted)] group-hover:text-[var(--fg-primary)] transition-colors">
-                    {s.text}
-                  </p>
-                </div>
-              </motion.a>
-            ))}
-          </motion.div>
-
+        <div className="max-w-2xl mx-auto">
           {/* Contact form */}
           <motion.form
             onSubmit={handleSubmit}
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="glass-card p-6 md:p-8 flex flex-col gap-4"
+            transition={{ duration: 0.7 }}
+            className="glass-card p-6 md:p-10 flex flex-col gap-5"
           >
-            <p className="text-sm text-[var(--fg-muted)] font-semibold font-mono mb-1">Quick message</p>
+            <p className="text-sm text-[var(--fg-muted)] font-semibold font-mono mb-2 text-center">Send a quick message</p>
 
             <input
               type="text"
+              name="name"
               placeholder="Your Name"
               required
-              className="rounded-xl px-4 py-3 text-sm outline-none transition-all"
+              className="rounded-xl px-5 py-4 text-sm outline-none transition-all"
               style={{
                 background:   "rgba(7,31,23,0.6)",
                 border:       "1px solid var(--glass-border)",
@@ -142,9 +130,10 @@ export function Contact() {
             />
             <input
               type="email"
+              name="email"
               placeholder="Your Email"
               required
-              className="rounded-xl px-4 py-3 text-sm outline-none transition-all"
+              className="rounded-xl px-5 py-4 text-sm outline-none transition-all"
               style={{
                 background: "rgba(7,31,23,0.6)",
                 border:     "1px solid var(--glass-border)",
@@ -154,10 +143,11 @@ export function Contact() {
               onBlur={(e)  => (e.target.style.borderColor = "var(--glass-border)")}
             />
             <textarea
+              name="message"
               placeholder="Your Message"
-              rows={4}
+              rows={5}
               required
-              className="rounded-xl px-4 py-3 text-sm outline-none transition-all resize-none"
+              className="rounded-xl px-5 py-4 text-sm outline-none transition-all resize-none"
               style={{
                 background: "rgba(7,31,23,0.6)",
                 border:     "1px solid var(--glass-border)",
@@ -170,9 +160,9 @@ export function Contact() {
             <motion.button
               type="submit"
               disabled={status !== "idle"}
-              className="btn-forest py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 mt-1"
-              whileHover={status === "idle" ? { scale: 1.03 } : {}}
-              whileTap={status === "idle" ? { scale: 0.97 } : {}}
+              className="btn-forest py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 mt-2"
+              whileHover={status === "idle" ? { scale: 1.02 } : {}}
+              whileTap={status === "idle" ? { scale: 0.98 } : {}}
               animate={status === "idle" ? { boxShadow: ["0 0 20px var(--glow-mint)", "0 0 35px var(--glow-mint)", "0 0 20px var(--glow-mint)"] } : {}}
               transition={status === "idle" ? { duration: 3, repeat: Infinity } : {}}
             >

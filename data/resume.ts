@@ -4,7 +4,7 @@ export const resumeData = {
     role: "AI/ML Engineer",
     tagline: "Hire Me!",
     bio: "Hi! I'm Nilanjan. A results-driven AI/ML Engineer with strong skills in building high-performance applications, DevOps engineering, and full stack technologies.",
-    email: "[EMAIL_ADDRESS]",
+    email: "nilanjans434@gmail.com",
     github: "https://github.com/Devnil434",
     linkedin: "https://www.linkedin.com/in/devnil-674580189",
     resumeUrl: "https://drive.google.com/file/d/1hqjMX7T7jsTlXgvvyhOgiEoGwuKYo2uv/view?usp=drive_link",
@@ -75,7 +75,7 @@ export const resumeData = {
       image: "/thumbnail/civic-eye.png",
       tags: ["React", "Express.js", "Supabase", "FastAPI", "Machine Learning", "Node.js"],
       liveUrl: "https://janata-seva-admin-panel.vercel.app/",
-      codeUrl: "https://github.com/Devnil434/Civic-Eye_Reporting",
+      codeUrl: "https://github.com/Devnil434/Civic-Eye",
       color: "#1db870", // Deeper green
     },
     {
@@ -127,7 +127,7 @@ export const resumeData = {
       image: "/thumbnail/multi-doc-rag.png",
       tags: ["n8n", "JavaScript", "Web Scraping", "Data Engineering", "Google Sheets API"],
       liveUrl: "https://example.com",
-      codeUrl: "https://github.com/Devnil434/kindle-bestseller-pipeline",
+      codeUrl: "https://github.com/Devnil434/n8n-amazon-bestsellers-data-scraper",
       color: "#FF9900", // Amazon Orange accent
     },
     {
