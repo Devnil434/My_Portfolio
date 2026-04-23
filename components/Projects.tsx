@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { resumeData } from "@/data/resume";
 import { ArrowUpRight, Code, ExternalLink, Zap, CheckCircle2, X } from "lucide-react";
 import { AvatarEntity } from "./AvatarEntity";
@@ -55,11 +56,25 @@ function TiltCard({ project, onOpenModal }: { project: Project; onOpenModal: () 
 
       {/* Top Gradient Bar */}
       <div
-        className="h-1.5 w-full transition-all duration-500 group-hover:h-2"
+        className="h-1.5 w-full transition-all duration-500 group-hover:h-2 z-20 relative"
         style={{ background: `linear-gradient(90deg, ${project.color}, transparent)` }}
       />
 
-      <div className="p-6 flex flex-col flex-grow z-10">
+      {/* Thumbnail Image */}
+      {project.image && (
+        <div className="relative w-full h-48 sm:h-56 shrink-0 overflow-hidden z-10 bg-[#0a0a0a]">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
+          />
+          {/* Subtle gradient overlay to blend with card body */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] to-transparent opacity-80" />
+        </div>
+      )}
+
+      <div className="p-6 flex flex-col flex-grow z-20">
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
             <div
