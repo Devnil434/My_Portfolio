@@ -10,6 +10,14 @@ export const resumeData = {
     resumeUrl: "https://drive.google.com/file/d/1hqjMX7T7jsTlXgvvyhOgiEoGwuKYo2uv/view?usp=drive_link",
     avatarUrl: "/avatar.png",
   },
+  education: [
+    {
+      institution: "Techno International New Town",
+      degree: "B.Tech in Computer Science & Engineering (IoT)",
+      period: "2023 – 2027",
+      description: "Specializing in Internet of Things, AI/ML, and full-stack development. Building real-world projects and deepening expertise in distributed systems and cloud technologies.",
+    },
+  ],
   techStack: [
     { name: "Next.js", category: "Framework" },
     { name: "React", category: "Library" },
