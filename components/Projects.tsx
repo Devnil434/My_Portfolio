@@ -3,7 +3,7 @@
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { resumeData } from "@/data/resume";
-import { ArrowUpRight, Code, ExternalLink, Zap, CheckCircle2, ChevronRight, X } from "lucide-react";
+import { ArrowUpRight, Code, ExternalLink, Zap, CheckCircle2, X } from "lucide-react";
 import { AvatarEntity } from "./AvatarEntity";
 
 type Project = (typeof resumeData.projects)[number];
@@ -290,7 +290,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                     <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> The Problem
                   </h4>
                   <p className="text-[var(--fg-primary)] leading-relaxed text-lg">
-                    {/* @ts-ignore */}
                     {project.problem || project.shortDescription}
                   </p>
                 </motion.div>
@@ -304,7 +303,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                     <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> The Solution
                   </h4>
                   <p className="text-[var(--fg-subtle)] leading-relaxed">
-                    {/* @ts-ignore */}
                     {project.solution || project.fullDescription}
                   </p>
                 </motion.div>
@@ -318,7 +316,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                     <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> Key Features
                   </h4>
                   <ul className="space-y-3">
-                    {/* @ts-ignore */}
                     {(project.features || []).map((feature: string, idx: number) => (
                       <motion.li
                         key={idx}
@@ -408,8 +405,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                     <span className="w-6 h-[1px] bg-[var(--glass-border)]" /> Performance
                   </h4>
                   <div className="space-y-4">
-                    {/* @ts-ignore */}
-                    {(project.metrics || []).map((metric: any, idx: number) => (
+                    {(project.metrics || []).map((metric: { label: string; val: number }, idx: number) => (
                       <div key={metric.label}>
                         <div className="flex justify-between text-xs font-mono mb-1.5">
                           <span className="text-[var(--fg-muted)]">{metric.label}</span>
