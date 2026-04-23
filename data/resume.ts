@@ -1,13 +1,13 @@
 export const resumeData = {
   personalInfo: {
     name: "Nilanjan Saha",
-    role: "Full Stack AI Engineer",
+    role: "AI/ML Engineer",
     tagline: "Hire Me!",
-    bio: "I craft futuristic, high-performance web experiences that blur the line between design and engineering. Obsessed with clean code, beautiful interfaces, and pushing the boundaries of the modern web.",
-    email: "nilanjans434@gmail.com",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    resumeUrl: "/resume.pdf",
+    bio: "Hi! I'm Nilanjan. A results-driven AI/ML Engineer with strong skills in building high-performance applications, DevOps engineering, and full stack technologies.",
+    email: "[EMAIL_ADDRESS]",
+    github: "https://github.com/Devnil434",
+    linkedin: "https://www.linkedin.com/in/devnil-674580189",
+    resumeUrl: "https://drive.google.com/file/d/1hqjMX7T7jsTlXgvvyhOgiEoGwuKYo2uv/view?usp=drive_link",
     avatarUrl: "/avatar.png",
   },
   techStack: [
@@ -49,7 +49,7 @@ export const resumeData = {
       image: "/thumbnail/project1.svg",
       tags: ["Python", "Streamlit", "LangChain", "ChromaDB", "Sentence Transformers", "Groq API"],
       liveUrl: "https://example.com",
-      codeUrl: "https://github.com/your-username/multi-doc-rag",
+      codeUrl: "https://github.com/Devnil434/multi-doc-rag",
       color: "#3EE6A5", // Adjusted to mint for the theme
     },
     {
@@ -134,19 +134,11 @@ export const resumeData = {
   experience: [
     {
       id: "exp-1",
-      role: "Senior Frontend Engineer",
-      company: "TechNova Inc.",
+      role: "Open Source Contributor",
+      company: "GSSoC, OSCI, Hacktoberfest, Open-Odyssey",
       period: "2023 – Present",
       description:
-        "Leading a 6-person frontend team building high-performance web applications. Improved core web vitals by 40% and implemented a shared design system adopted across 3 products.",
-    },
-    {
-      id: "exp-2",
-      role: "UI/UX Developer",
-      company: "Creative Solutions Ltd.",
-      period: "2021 – 2023",
-      description:
-        "Designed and developed interactive interfaces for 12+ client projects. Bridged the gap between design and engineering, delivering pixel-perfect implementations from Figma.",
+        "Remote – Contributed to 10+ repositories improving reliability, test coverage, and documentation quality. Earned official Hacktoberfest Swag for validated pull requests across multiple open-source projects. Enhanced performance and modularity across multiple open-source projects, gaining collaborative development experience.",
     },
   ],
 };

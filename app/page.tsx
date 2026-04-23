@@ -3,6 +3,7 @@ import { Navbar }             from "@/components/Navbar";
 import { Hero }               from "@/components/Hero";
 import { WaveDivider }        from "@/components/WaveDivider";
 import { TechStack }          from "@/components/TechStack";
+import { Experience }         from "@/components/Experience";
 import { Projects }           from "@/components/Projects";
 import { Contact }            from "@/components/Contact";
 import { Footer }             from "@/components/Footer";
@@ -21,9 +22,11 @@ export default function Home() {
         <Hero />
         <WaveDivider label="// CAPABILITIES //" />
         <TechStack />
-        <WaveDivider flip label="// PROJECTS //" />
+        <WaveDivider flip label="// EXPERIENCE //" />
+        <Experience />
+        <WaveDivider label="// PROJECTS //" />
         <Projects />
-        <WaveDivider label="// CONTACT //" />
+        <WaveDivider flip label="// CONTACT //" />
         <Contact />
       </main>
 

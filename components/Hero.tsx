@@ -57,13 +57,19 @@ export function Hero() {
               <span className="text-forest glow-mint">{name}</span>
             </motion.h1>
 
-            {/* Role */}
-            <motion.div {...fadeUp(0.2)} className="flex items-center gap-3">
+            {/* Role & Tagline */}
+            <motion.div {...fadeUp(0.2)} className="flex items-center flex-wrap gap-4 mt-2">
               <div className="h-px w-10 bg-[var(--accent-mint)] opacity-50" />
               <p className="text-xl md:text-2xl text-[var(--fg-muted)] font-mono">
                 {role}
-                <span className="text-[var(--accent-mint)] opacity-70"> {tagline}</span>
               </p>
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-[var(--accent-mint)] to-emerald-400 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                <span className="relative inline-flex items-center justify-center px-4 py-1.5 text-sm font-bold text-[#0a0a0a] bg-[var(--accent-mint)] rounded-full uppercase tracking-wider">
+                  <span className="w-1.5 h-1.5 mr-2 rounded-full bg-[#0a0a0a] animate-pulse" />
+                  {tagline}
+                </span>
+              </div>
             </motion.div>
 
             {/* Bio */}
