@@ -4,6 +4,7 @@ import { Hero }               from "@/components/Hero";
 import { WaveDivider }        from "@/components/WaveDivider";
 import { TechStack }          from "@/components/TechStack";
 import { Experience }         from "@/components/Experience";
+import { Education }          from "@/components/Education";
 import { Projects }           from "@/components/Projects";
 import { Achievements }       from "@/components/Achievements";
 import { Contact }            from "@/components/Contact";
@@ -28,7 +29,9 @@ export default function Home() {
         <TechStack />
         <WaveDivider flip label="// EXPERIENCE //" />
         <Experience />
-        <WaveDivider label="// PROJECTS //" />
+        <WaveDivider label="// EDUCATION //" />
+        <Education />
+        <WaveDivider flip label="// PROJECTS //" />
         <Projects />
         <WaveDivider flip label="// ACHIEVEMENTS //" />
         <Achievements />
