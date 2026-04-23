@@ -5,6 +5,7 @@ import { WaveDivider }        from "@/components/WaveDivider";
 import { TechStack }          from "@/components/TechStack";
 import { Experience }         from "@/components/Experience";
 import { Projects }           from "@/components/Projects";
+import { Achievements }       from "@/components/Achievements";
 import { Contact }            from "@/components/Contact";
 import { Footer }             from "@/components/Footer";
 import { Preloader }          from "@/components/Preloader";
@@ -29,7 +30,9 @@ export default function Home() {
         <Experience />
         <WaveDivider label="// PROJECTS //" />
         <Projects />
-        <WaveDivider flip label="// CONTACT //" />
+        <WaveDivider flip label="// ACHIEVEMENTS //" />
+        <Achievements />
+        <WaveDivider label="// CONTACT //" />
         <Contact />
       </main>
 

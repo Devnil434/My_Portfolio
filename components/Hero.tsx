@@ -108,13 +108,13 @@ export function Hero() {
             {/* Stats */}
             <motion.div
               {...fadeUp(0.5)}
-              className="flex gap-8 pt-4 border-t"
+              className="flex gap-6 pt-4 border-t flex-wrap"
               style={{ borderColor: "var(--glass-border)" }}
             >
               {[
-                { v: "5+", l: "Years" },
-                { v: "30+", l: "Projects" },
-                { v: "98", l: "Lighthouse" },
+                { v: "4+", l: "Projects Completed" },
+                { v: "9+", l: "Hackathons Participated" },
+                { v: "4+", l: "Certifications" },
               ].map((s) => (
                 <div key={s.l} className="flex flex-col gap-0.5">
                   <span className="text-2xl font-black text-forest">{s.v}</span>

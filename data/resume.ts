@@ -141,4 +141,21 @@ export const resumeData = {
         "Remote – Contributed to 10+ repositories improving reliability, test coverage, and documentation quality. Earned official Hacktoberfest Swag for validated pull requests across multiple open-source projects. Enhanced performance and modularity across multiple open-source projects, gaining collaborative development experience.",
     },
   ],
+  achievements: [
+    {
+      id: "ach-1",
+      title: "Google Solution Challenge 2025",
+      description: "Selected among Top 105 Global Teams worldwide.",
+    },
+    {
+      id: "ach-2",
+      title: "Hackathon Participation",
+      description: "Competed in 9+ hackathons, consistently delivering rapid and functional prototypes.",
+    },
+    {
+      id: "ach-3",
+      title: "Rotary Club Merit Test",
+      description: "Ranked 10th among participants.",
+    },
+  ],
 };
