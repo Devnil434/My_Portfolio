@@ -1,6 +1,6 @@
 # My Portfolio
 
-🚀 **Live Demo:** [https://nilanjansaha.netlify.app/](https://nilanjansaha.netlify.app/)
+🚀 **Live Demo:** [https://nilanjansaha.netlify.app/](<img width="1908" height="869" alt="Screenshot 2026-04-24 182342" src="https://github.com/user-attachments/assets/2bddc874-8748-49de-8500-f2060ecc4a73" />)
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
